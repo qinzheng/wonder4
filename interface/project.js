@@ -73,7 +73,7 @@ async function getProjectsByTime(options) {
   let projects = await app.model.Project.findAll({
     limit: options.limit || 50,
     offset: options.offset || 0,
-    sort: { timestamp: -1 }
+    // sort: { timestamp: -1 }
   })
   return { projects: projects }
 }
@@ -85,7 +85,7 @@ async function getImprovesById(p_id) {
     ],
     limit: options.limit || 50,
     offset: options.offset || 0,
-    sort: { timestamp: -1 }
+    // sort: { timestamp: -1 }
   })
   return { improves: improves }
 }
@@ -99,7 +99,7 @@ async function getRecordsById(p_id) {
     ],
     limit: options.limit || 50,
     offset: options.offset || 0,
-    sort: { timestamp: -1 }
+    // sort: { timestamp: -1 }
   })
   //捐款总金额
   let moneySum = 0
