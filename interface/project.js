@@ -1,11 +1,3 @@
-async function getProjectsByTime(options) {
-  let projects = await app.model.Project.findAll({
-    limit: options.limit || 50,
-    offset: options.offset || 0,
-    sort: { timestamp: -1 }
-  })
-  return { projects: projects }
-}
 //查询所有项目
 app.route.get('/projects', async (req) => {
   let query = req.query
@@ -54,6 +46,12 @@ app.route.get('/projects/:id', async (req) => {
     condition: { id: id }
   })
   if (!project) throw new Error('Project not found')
+
+  //查询关联的证明
+  let improves = await getImprovesById(id)
+  //查询关联的记录
+  let records = await getRecordsById(id)
+
   let account = await app.model.Account.findOne({
     condition: { address: article.authorId }
   })
@@ -61,6 +59,54 @@ app.route.get('/projects/:id', async (req) => {
     project.nickname = account.str1
   }
   let result = { project: project }
+  if (!improves) {
+    result.improves = improves
+  }
+  if (!records) {
+    result.records = records
+  }
   app.custom.cache.set(key, result)
   return result
 })
+
+async function getProjectsByTime(options) {
+  let projects = await app.model.Project.findAll({
+    limit: options.limit || 50,
+    offset: options.offset || 0,
+    sort: { timestamp: -1 }
+  })
+  return { projects: projects }
+}
+
+async function getImprovesById(p_id) {
+  let improves = await app.model.Improve.findAll({
+    condition: [
+      { p_id: p_id}
+    ],
+    limit: options.limit || 50,
+    offset: options.offset || 0,
+    sort: { timestamp: -1 }
+  })
+  return { improves: improves }
+}
+
+async function getRecordsById(p_id) {
+  //捐款总人数
+  let count = await app.model.Record.count()
+  let records = await app.model.Record.findAll({
+    condition: [
+      { p_id: p_id}
+    ],
+    limit: options.limit || 50,
+    offset: options.offset || 0,
+    sort: { timestamp: -1 }
+  })
+  //捐款总金额
+  let moneySum = 0
+  if (records) {
+    for (let record of records) {
+      moneySum += record.money
+    }
+  }
+  return { count: count, moneySum: moneySum, records: records }
+}
