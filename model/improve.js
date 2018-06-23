@@ -23,6 +23,10 @@ module.exports = {
       type: 'String',
       length: 256,
       not_null: true
+    }, {
+      name: 'timestamp',
+      type: 'Number',
+      not_null: true
     }
   ]
 }

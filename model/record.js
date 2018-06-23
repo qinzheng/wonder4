@@ -22,6 +22,10 @@ module.exports = {
       name: 'd_id',     //捐款人
       type: 'String',
       not_null: true
+    }, {
+      name: 'timestamp',
+      type: 'Number',
+      not_null: true
     }
   ]
 }
