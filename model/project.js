@@ -3,7 +3,7 @@ module.exports = {
   fields: [
     {
       name: '_id',      //唯一标识
-      type: 'Number',
+      type: 'String',
       not_null: true,
       primary_key: true,
       index: true
@@ -27,7 +27,11 @@ module.exports = {
       length: 100
     },
     {
-      name: 'u_id',     //用款人
+      name: 'author_id', //发起人
+      type: 'String',
+      not_null: true
+    }, {
+      name: 'timestamp',
       type: 'Number',
       not_null: true
     }
