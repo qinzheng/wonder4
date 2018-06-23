@@ -6,6 +6,7 @@ app.route.get('/projects', async (req) => {
   }
   let key = ['projects', query.sortBy, query.limit, query.offset].join('_')
   if (app.custom.cache.has(key)) {
+    console.log('查到缓存.....')
     return app.custom.cache.get(key)
   }
   let res = null
@@ -14,6 +15,7 @@ app.route.get('/projects', async (req) => {
   } else {
     throw new Error('Sort field not supported')
   }
+  console.log(res)
   let addresses = res.projects.map((a) => a.authorId)
   let accounts = await app.model.Account.findAll({
     condition: {
@@ -75,6 +77,10 @@ async function getProjectsByTime(options) {
     offset: options.offset || 0,
     // sort: { timestamp: -1 }
   })
+  console.log('projects ====> ', {
+    limit: options.limit || 50,
+    offset: options.offset || 0
+  }, projects)
   return { projects: projects }
 }
 
