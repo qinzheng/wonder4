@@ -3,9 +3,9 @@ module.exports = {
   fields: [
     {
       name: '_id',      //唯一标识
-      type: 'String',
-      length: 256,
+      type: 'Number',
       not_null: true,
+      primary_key: true,
       index: true
     },
     {
@@ -28,8 +28,7 @@ module.exports = {
     },
     {
       name: 'u_id',     //用款人
-      type: 'String',
-      length: 256,
+      type: 'Number',
       not_null: true
     }
   ]

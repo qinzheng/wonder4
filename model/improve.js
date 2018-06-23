@@ -3,21 +3,19 @@ module.exports = {
   fields: [
     {
       name: '_id',          //唯一标识
-      type: 'String',
-      length: 256,
+      type: 'Number',
       not_null: true,
+      primary_key: true,
       index: true
     },
     {
       name: 'p_id',         //关联项目
-      type: 'String',
-      length: 256,
+      type: 'Number',
       not_null: true
     },
     {
       name: 'improver_id',   //证明人标识
-      type: 'String',
-      length: 256,
+      type: 'Number',
       not_null: true
     },
     {
