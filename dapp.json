@@ -1,0 +1,17 @@
+{
+  "name": "wonder4",
+  "link": "https://github.com/qinzheng/wonder4.zip",
+  "category": 1,
+  "description": "wonder4",
+  "tags": "asch,dapp",
+  "icon": "https://github.com/qinzheng/wonder4.png",
+  "delegates": [
+    "08845892a6b67df943188ccfb6e29906e90d79c02b2c3c08fc803789674949f3",
+    "99511924f36347b309cf021ea1179e37fb30934c0260db818b01554004038354",
+    "f375a0ae948e6fe8b6c52e55598851ac3ef36e74243a7d9d698eb07ef2f1a8f9",
+    "733eb79b6d834f227885d7c5db98280e8cb3dce1e9ff237d5d543962ddc00c47",
+    "6f022cf3c6bc6aa9a9704252b0056e45e57ff2ea45a60bdf36d9701fa7b15d7e"
+  ],
+  "unlockDelegates": 3,
+  "type": 0
+}
