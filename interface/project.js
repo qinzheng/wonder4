@@ -42,3 +42,25 @@ app.route.get('/projects', async (req) => {
   app.custom.cache.set(key, res)
   return res
 })
+
+//按照id查询项目
+app.route.get('/projects/:id', async (req) => {
+  let id = req.params.id
+  let key = 'project' + id
+  if (app.custom.cache.has(key)) {
+    return app.custom.cache.get(key)
+  }
+  let project = await app.model.Project.findOne({
+    condition: { id: id }
+  })
+  if (!project) throw new Error('Project not found')
+  let account = await app.model.Account.findOne({
+    condition: { address: article.authorId }
+  })
+  if (account) {
+    project.nickname = account.str1
+  }
+  let result = { project: project }
+  app.custom.cache.set(key, result)
+  return result
+})
