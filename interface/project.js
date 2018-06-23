@@ -6,7 +6,6 @@ app.route.get('/projects', async (req) => {
   }
   let key = ['projects', query.sortBy, query.limit, query.offset].join('_')
   if (app.custom.cache.has(key)) {
-    console.log('查到缓存.....')
     return app.custom.cache.get(key)
   }
   let res = null
@@ -15,7 +14,6 @@ app.route.get('/projects', async (req) => {
   } else {
     throw new Error('Sort field not supported')
   }
-  console.log(res)
   let addresses = res.projects.map((a) => a.authorId)
   let accounts = await app.model.Account.findAll({
     condition: {
@@ -44,9 +42,7 @@ app.route.get('/projects/:id', async (req) => {
   if (app.custom.cache.has(key)) {
     return app.custom.cache.get(key)
   }
-  let project = await app.model.Project.findOne({
-    condition: { id: id }
-  })
+  let project = await app.model.Project.findOne({ _id: id })
   if (!project) throw new Error('Project not found')
 
   //查询关联的证明
@@ -54,19 +50,16 @@ app.route.get('/projects/:id', async (req) => {
   //查询关联的记录
   let records = await getRecordsById(id)
 
-  let account = await app.model.Account.findOne({
-    condition: { address: article.authorId }
-  })
+  let account = await app.model.Account.findOne({ address: project.author_id })
   if (account) {
     project.nickname = account.str1
   }
-  let result = { project: project }
-  if (!improves) {
-    result.improves = improves
+  let result = {
+    ...project,
+    ...improves,
+    ...records
   }
-  if (!records) {
-    result.records = records
-  }
+
   app.custom.cache.set(key, result)
   return result
 })
@@ -77,20 +70,14 @@ async function getProjectsByTime(options) {
     offset: options.offset || 0,
     // sort: { timestamp: -1 }
   })
-  console.log('projects ====> ', {
-    limit: options.limit || 50,
-    offset: options.offset || 0
-  }, projects)
   return { projects: projects }
 }
 
 async function getImprovesById(p_id) {
   let improves = await app.model.Improve.findAll({
-    condition: [
-      { p_id: p_id}
-    ],
-    limit: options.limit || 50,
-    offset: options.offset || 0,
+    condition: { p_id: p_id },
+    limit: 50,
+    offset: 0,
     // sort: { timestamp: -1 }
   })
   return { improves: improves }
@@ -98,13 +85,13 @@ async function getImprovesById(p_id) {
 
 async function getRecordsById(p_id) {
   //捐款总人数
-  let count = await app.model.Record.count()
+  let count = await app.model.Record.count({
+    p_id: p_id
+  })
   let records = await app.model.Record.findAll({
-    condition: [
-      { p_id: p_id}
-    ],
-    limit: options.limit || 50,
-    offset: options.offset || 0,
+    condition: { p_id: p_id },
+    limit: 50,
+    offset: 0,
     // sort: { timestamp: -1 }
   })
   //捐款总金额

@@ -1,6 +1,6 @@
 
 module.exports = {
-    createProject: function (name, money, desc) {
+    createProject: function (name, money, desc, images) {
         if (!name) {
             return '名称不能为空！'
         }
@@ -19,7 +19,8 @@ module.exports = {
             p_money: money,
             p_desc: desc,
             timestamp: this.trs.timestamp,
-            author_id: this.trs.senderId
+            author_id: this.trs.senderId,
+            p_image: images
         })
     },
 
@@ -33,15 +34,18 @@ module.exports = {
         }
         let senderId = this.trs.senderId
 
-        app.sdb.lock('project.improve@' + pid)
+        app.sdb.lock('project.exist@' + pid)
+        let exists = await app.model.Project.exists({ _id: pid})
+        if (!exists) return '您要证明的项目不存在!'
 
-        let exists = await app.model.Improve.exists({ p_id: pid, improve_id: senderId })
+        app.sdb.lock('project.improve@' + pid)
+        exists = await app.model.Improve.exists({ p_id: pid, improver_id: senderId })
         if (exists) return '您已经为该项目证明过！'
 
         app.sdb.create('Improve', {
             _id: app.autoID.increment('improve_max_id'),
             p_id: pid,
-            improve_id: senderId,
+            improver_id: senderId,
             improve_msg: msg,
             timestamp: this.trs.timestamp
         })
@@ -55,6 +59,10 @@ module.exports = {
         if (!money) {
             return '捐款金额不能为空!'
         }
+
+        app.sdb.lock('project.exist@' + pid)
+        let exists = await app.model.Project.exists({ _id: pid})
+        if (!exists) return '您要捐款的项目不存在!'
 
         money = parseFloat(money)
         let senderId = this.trs.senderId
