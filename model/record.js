@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'record',
+  name: 'records',
   fields: [
     {
       name: '_id',      //唯一标识

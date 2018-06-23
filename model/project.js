@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'project',
+  name: 'projects',
   fields: [
     {
       name: '_id',      //唯一标识
@@ -32,6 +32,11 @@ module.exports = {
       type: 'String',
       not_null: true,
       length: 256
+    },
+    {
+      name: 'p_image', //项目图片
+      type: 'String',
+      length: 512
     },
     {
       name: 'timestamp',

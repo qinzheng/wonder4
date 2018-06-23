@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'improve',
+  name: 'improves',
   fields: [
     {
       name: '_id',          //唯一标识
@@ -26,7 +26,8 @@ module.exports = {
       type: 'String',
       length: 256,
       not_null: true
-    }, {
+    },
+    {
       name: 'timestamp',
       type: 'Number',
       not_null: true

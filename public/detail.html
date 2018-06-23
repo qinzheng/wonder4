@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>爱心众筹</title>
+<link href="assets/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<style>
+* {
+    font-family: "microsoft yahei", Arial, sans-serif;
+}
+html, body {
+    -webkit-text-size-adjust: none;
+    margin: 0;
+    padding: 0;
+	max-width: 960px;
+	margin: 0 auto;
+}
+.header {
+	margin: 0 auto;
+	padding: 0 15px;
+	width: 96%;
+	height: 65px;
+}
+.personal {
+    margin-right: 10px;
+	margin-top: 10px;
+    float: right;
+    font-size: 35px;
+	color: #da1f26;
+	cursor: pointer;
+}
+.container {
+	margin: 0 auto;
+	width: 96%;
+}
+.desc {
+	font-size: 15px;
+	text-align: left;
+	color: #444;
+	margin: 0;
+	padding: 5px 0;
+}
+.amount {
+	font-size: 15px;
+	text-align: left;
+	color: #444;
+	margin: 0;
+	padding: 5px 0;
+}
+.originator {
+	font-size: 18px;
+	font-weight: 500;
+	color: #444;
+	margin: 0;
+	padding: 5px 0;
+}
+.seek-help-txt {
+	margin: 0;
+	padding: 0;
+	height: 30px;
+	list-style-type: none;
+}
+.seek-help-txt li {
+	display: block;
+    width: 50%;
+    float: left;
+    font-size: 15px;
+    color: #444;
+    line-height: 30px;
+}
+.seek-help-imgs img {
+	width: 100%;
+	margin: 10px 0;
+}
+</style>
+<script type="text/javascript" src="assets/js/jquery.js"></script>
+<script type="text/javascript">
+function getParams(name, decode) {
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if (r !== null)
+		return decode && decode(r[2]) || unescape(r[2]);
+	return null;
+}
+
+function renderSeekHelp(seekHelp){
+	var container = $("#seek-help");
+	
+	var originatorP = $("<p class=\"originator\">").text("发起人:    " + seekHelp.originator)
+	container.append(originatorP);
+	
+	var descP = $("<p class=\"desc\">").text(seekHelp.title)
+	container.append(descP);
+	
+	var tAmountP = $("<p class=\"amount\">").text("目标金额:    " + seekHelp.target_amount)
+	container.append(tAmountP);
+	
+	var txt = $("<ul>");
+	txt.addClass("seek-help-txt");
+	txt.append($("<li>已筹款金额:    <span class=\"font-green\">"+ seekHelp.current_amount +"</span></li>"));
+	txt.append($("<li>已获得次帮助:    <span class=\"font-green\">"+ seekHelp.helped_count +"</span></li>"));
+	container.append(txt);
+	
+	var imgs = $("<div>");
+	imgs.addClass("seek-help-imgs");
+	if (Array.isArray(seekHelp.images) && seekHelp.images.length > 0)
+	seekHelp.images.forEach(function (img) {
+		imgs.append($("<img>").attr("src", img));
+	});
+	container.append(imgs);
+	
+}
+
+$(document).ready(function(){
+	var shId = getParams("id");
+	
+	/**
+	var url = "";
+	var params = {};
+	
+	$.ajax({
+		async: false,
+		type: "POST",
+		contentType : "application/x-www-form-urlencoded",
+		url: url,
+		data: params,
+		complete: function (r, s) {
+			//console.log(r.responseText);
+			if (s == "success") {
+				var result = $.parseJSON(r.responseText);
+				if (result && result.success) {
+					renderSeekHelp(result);
+				} else {
+					alert(r);
+				}
+			} else {
+				alert(r);
+			}
+		},
+		error : function (r, s, e) {
+			alert(r);
+		}
+	});
+	**/
+	
+	
+	var seekHelp = {
+		id: shId,
+		title: "拾起18岁少年的希望：985大学入学体检却查出白血病！",
+		desc: "拾起18岁少年的希望：985大学入学体检却查出白血病！",
+		originator: "夏烽翊",
+		target_amount: 500000,
+		images: ["https://static.manyoubang.com/axc/index_web/images/axcEg1@2x.png", "https://static.manyoubang.com/axc/index_web/images/axcEg1@2x.png"],
+		current_amount: 500837,
+		helped_count: 16646,
+		date: "2017-09-11"
+	};
+	renderSeekHelp(seekHelp);
+});
+ 
+</script>
+</head>
+<body>
+<div class="header">
+<div class="personal">
+<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+</div>
+</div>
+<div class="container" id="seek-help">
+</div>
+</body>
+</html>

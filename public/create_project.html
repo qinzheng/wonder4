@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>爱心众筹</title>
+    <link href="assets/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            font-family: "microsoft yahei", Arial, sans-serif;
+        }
+        html, body {
+            -webkit-text-size-adjust: none;
+            margin: 0;
+            padding: 0;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .header {
+            margin: 0 auto;
+            padding: 0 15px;
+            width: 96%;
+            height: 65px;
+        }
+        .personal {
+            margin-right: 10px;
+            margin-top: 10px;
+            float: right;
+            font-size: 35px;
+            color: #da1f26;
+            cursor: pointer;
+        }
+        .container {
+            margin: 0 auto;
+            width: 96%;
+        }
+        .desc {
+            font-size: 15px;
+            text-align: left;
+            color: #444;
+            margin: 0;
+            padding: 5px 0;
+        }
+        .amount {
+            font-size: 15px;
+            text-align: left;
+            color: #444;
+            margin: 0;
+            padding: 5px 0;
+        }
+        .originator {
+            font-size: 18px;
+            font-weight: 500;
+            color: #444;
+            margin: 0;
+            padding: 5px 0;
+        }
+        .seek-help-txt {
+            margin: 0;
+            padding: 0;
+            height: 30px;
+            list-style-type: none;
+        }
+        .seek-help-txt li {
+            display: block;
+            width: 50%;
+            float: left;
+            font-size: 15px;
+            color: #444;
+            line-height: 30px;
+        }
+        .seek-help-imgs img {
+            width: 100%;
+            margin: 10px 0;
+        }
+    </style>
+    <script type="text/javascript" src="assets/js/jquery.js"></script>
+    <script type="text/javascript">
+      var DAPP_ID = window.location.pathname.split('/')[2];
+      var BASE_URL = '/api/dapps/' + DAPP_ID;
+
+
+      function renderProjectCreate(){
+        var container = $("#project-create");
+
+        var p_name = $("<input id='p_name' type='text'><br/>")
+        container.append(p_name);
+
+        var p_desc = $("<p id='p_desc' class=\"desc\"><br/>")
+        container.append(p_desc);
+
+        var p_money = $("<p id='p_money' class=\"amount\"><br/>")
+        container.append(p_money);
+
+        var p_image = $("<input id='p_image' type='text'><br/>")
+        container.append(p_image);
+
+        var sb = $("<input type='button' value='提交'>")
+        container.append(sb)
+      }
+
+      $(document).ready(function(){
+        renderProjectCreate();
+
+        var args = [];
+        args.push($("p_name").val());
+        args.push($("p_money").val());
+        args.push($("p_desc").val());
+        args.push($("p_image").val());
+
+        var UserInfo = {
+          secret: '',
+        };
+        var fee = '10'
+        var type = 1000
+        var data = {
+          secret: UserInfo.secret,
+          fee: fee,
+          type: Number(type),
+          args: JSON.stringify(args)
+        }
+
+         $.ajax({
+            type: "PUT",
+            url: BASE_URL + '/transactions/unsigned',
+            data: data,
+            dataType: 'json',
+            complete: function (r, s) {
+                if (s == "success") {
+                    alert("提交成功")
+                } else {
+                    alert(r);
+                }
+            },
+            error : function (r, s, e) {
+                alert(r);
+            }
+        });
+
+      });
+
+    </script>
+</head>
+<body>
+<div class="header">
+    <div class="personal">
+        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+    </div>
+</div>
+<div class="container" id="project-create">
+</div>
+</body>
+</html>
