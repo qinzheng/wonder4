@@ -5,7 +5,7 @@ app.route.get('/records/:id', async (req) => {
   if (app.custom.cache.has(key)) {
     return app.custom.cache.get(key)
   }
-  let record = await app.model.Record.findOne({ _id: id })
+  let record = await app.model.Record.findOne({ condition: { _id: id } })
   if (!record) throw new Error('Record not found')
   let account = await app.model.Account.findOne({ address: record.d_id })
   if (account) {

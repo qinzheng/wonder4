@@ -1,172 +1,250 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>爱心众筹</title>
-<link href="assets/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet">
-<style>
-* {
-    font-family: "microsoft yahei", Arial, sans-serif;
-}
-html, body {
-    -webkit-text-size-adjust: none;
-    margin: 0;
-    padding: 0;
-	max-width: 960px;
-	margin: 0 auto;
-}
-.header {
-	margin: 0 auto;
-	padding: 0 15px;
-	width: 96%;
-	height: 65px;
-}
-.personal {
-    margin-right: 10px;
-	margin-top: 10px;
-    float: right;
-    font-size: 35px;
-	color: #da1f26;
-	cursor: pointer;
-}
-.container {
-	margin: 0 auto;
-	width: 96%;
-}
-.desc {
-	font-size: 15px;
-	text-align: left;
-	color: #444;
-	margin: 0;
-	padding: 5px 0;
-}
-.amount {
-	font-size: 15px;
-	text-align: left;
-	color: #444;
-	margin: 0;
-	padding: 5px 0;
-}
-.originator {
-	font-size: 18px;
-	font-weight: 500;
-	color: #444;
-	margin: 0;
-	padding: 5px 0;
-}
-.seek-help-txt {
-	margin: 0;
-	padding: 0;
-	height: 30px;
-	list-style-type: none;
-}
-.seek-help-txt li {
-	display: block;
-    width: 50%;
-    float: left;
-    font-size: 15px;
-    color: #444;
-    line-height: 30px;
-}
-.seek-help-imgs img {
-	width: 100%;
-	margin: 10px 0;
-}
-</style>
-<script type="text/javascript" src="assets/js/jquery.js"></script>
-<script type="text/javascript">
-function getParams(name, decode) {
-	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-	var r = window.location.search.substr(1).match(reg);
-	if (r !== null)
-		return decode && decode(r[2]) || unescape(r[2]);
-	return null;
-}
-
-function renderSeekHelp(seekHelp){
-	var container = $("#seek-help");
-	
-	var originatorP = $("<p class=\"originator\">").text("发起人:    " + seekHelp.originator)
-	container.append(originatorP);
-	
-	var descP = $("<p class=\"desc\">").text(seekHelp.title)
-	container.append(descP);
-	
-	var tAmountP = $("<p class=\"amount\">").text("目标金额:    " + seekHelp.target_amount)
-	container.append(tAmountP);
-	
-	var txt = $("<ul>");
-	txt.addClass("seek-help-txt");
-	txt.append($("<li>已筹款金额:    <span class=\"font-green\">"+ seekHelp.current_amount +"</span></li>"));
-	txt.append($("<li>已获得次帮助:    <span class=\"font-green\">"+ seekHelp.helped_count +"</span></li>"));
-	container.append(txt);
-	
-	var imgs = $("<div>");
-	imgs.addClass("seek-help-imgs");
-	if (Array.isArray(seekHelp.images) && seekHelp.images.length > 0)
-	seekHelp.images.forEach(function (img) {
-		imgs.append($("<img>").attr("src", img));
-	});
-	container.append(imgs);
-	
-}
-
-$(document).ready(function(){
-	var shId = getParams("id");
-	
-	/**
-	var url = "";
-	var params = {};
-	
-	$.ajax({
-		async: false,
-		type: "POST",
-		contentType : "application/x-www-form-urlencoded",
-		url: url,
-		data: params,
-		complete: function (r, s) {
-			//console.log(r.responseText);
-			if (s == "success") {
-				var result = $.parseJSON(r.responseText);
-				if (result && result.success) {
-					renderSeekHelp(result);
-				} else {
-					alert(r);
-				}
-			} else {
-				alert(r);
-			}
-		},
-		error : function (r, s, e) {
-			alert(r);
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>爱心众筹</title>
+	<link href="assets/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>
+	<style>
+		* {
+			font-family: "microsoft yahei", Arial, sans-serif;
 		}
-	});
-	**/
-	
-	
-	var seekHelp = {
-		id: shId,
-		title: "拾起18岁少年的希望：985大学入学体检却查出白血病！",
-		desc: "拾起18岁少年的希望：985大学入学体检却查出白血病！",
-		originator: "夏烽翊",
-		target_amount: 500000,
-		images: ["https://static.manyoubang.com/axc/index_web/images/axcEg1@2x.png", "https://static.manyoubang.com/axc/index_web/images/axcEg1@2x.png"],
-		current_amount: 500837,
-		helped_count: 16646,
-		date: "2017-09-11"
-	};
-	renderSeekHelp(seekHelp);
-});
- 
-</script>
+
+		html,
+		body {
+			-webkit-text-size-adjust: none;
+			margin: 0;
+			padding: 0;
+			max-width: 960px;
+			margin: 0 auto;
+		}
+
+		.header {
+			margin: 0 auto;
+			padding: 0 15px;
+			width: 96%;
+			height: 65px;
+		}
+
+		.personal {
+			margin-right: 10px;
+			margin-top: 10px;
+			float: right;
+			font-size: 35px;
+			color: #da1f26;
+			cursor: pointer;
+		}
+
+		.container {
+			margin: 0 auto;
+			width: 96%;
+		}
+
+		.desc {
+			font-size: 15px;
+			text-align: left;
+			color: #444;
+			margin: 0;
+			padding: 5px 0;
+		}
+
+		.amount {
+			font-size: 15px;
+			text-align: left;
+			color: #444;
+			margin: 0;
+			padding: 5px 0;
+		}
+
+		.originator {
+			font-size: 18px;
+			font-weight: 500;
+			color: #444;
+			margin: 0;
+			padding: 5px 0;
+		}
+
+		.seek-help-txt {
+			margin: 0;
+			padding: 0;
+			height: 30px;
+			list-style-type: none;
+		}
+
+		.seek-help-txt li {
+			display: block;
+			width: 50%;
+			float: left;
+			font-size: 15px;
+			color: #444;
+			line-height: 30px;
+		}
+
+		.operation button {
+			margin: 6px 17px;
+		}
+
+		.donate-title {
+			font-size: 15px;
+			font-weight: 500;
+			color: #444;
+			margin: 0;
+			padding-top: 5px;
+		}
+
+		.donate img {
+			width: 120px;
+			height: 35px;
+			margin: 6px 6px 6px 0;
+			cursor: pointer;
+		}
+
+		.seek-help-imgs img {
+			width: 100%;
+			margin: 10px 0;
+		}
+	</style>
+	<script type="text/javascript" src="assets/js/common.js"></script>
+	<script type="text/javascript" src="assets/js/user.js"></script>
+	<script type="text/javascript">
+
+		function donate(shId, money) {
+			var args = [];
+			args.push(shId);
+			args.push(money + "");
+			var data = {
+				secret: User.getSecret(),
+				fee: '10000000',
+				type: Number('1002'),
+				args: JSON.stringify(args)
+			}
+			$.ajax({
+				type: "PUT",
+				url: requestUrl + "/transactions/unsigned",
+				data: data,
+				dataType: "json",
+				success: function (r, s) {
+					if (r && r.success) {
+						window.location.reload();
+					} else {
+						alert('捐款失败 请重试！');
+					}
+
+				}
+			});
+		}
+
+		function renderSeekHelp(seekHelp) {
+			var container = $("#seek-help");
+
+			var originatorP = $("<p class=\"originator\">").text("发起人:    " + seekHelp.nickname)
+			container.append(originatorP);
+
+			var descP = $("<p class=\"desc\">").text(seekHelp.p_desc)
+			container.append(descP);
+
+			var tAmountP = $("<p class=\"amount\">").text("目标金额:    " + seekHelp.p_money)
+			container.append(tAmountP);
+
+			var txt = $("<ul>");
+			txt.addClass("seek-help-txt");
+			txt.append($("<li>已筹款金额:    <span class=\"font-green\">" + seekHelp.moneySum + "</span></li>"));
+			txt.append($("<li>已获得帮助次:    <span class=\"font-green\">" + seekHelp.count + "</span></li>"));
+			container.append(txt);
+
+			var operationD = $("<div class=\"operation\">");
+			var endorser = $("<button type=\"button\" class=\"btn btn-default\">查看背书详细</button>");
+			endorser.click(function () {
+				window.location.href = 'endorsers.html?id=' + seekHelp._id;
+			});
+			var donation = $("<button type=\"button\" class=\"btn btn-default\">查看捐赠详细</button>");
+			donation.click(function () {
+				window.location.href = 'donations.html?id=' + seekHelp._id;
+			});
+			operationD.append(endorser);
+			operationD.append(donation);
+			container.append(operationD);
+
+			container.append($("<p class=\"donate-title\">捐赠</p>"));
+			var donateD = $("<div class=\"donate\">");
+			var zhifubao = $("<img src=\"assets/img/zhifubao.jpg\" style=\"width: 150px;\">");
+			zhifubao.click(function () {
+				donate(seekHelp._id, 100)
+
+			});
+			var weixin = $("<img src=\"assets/img/weixin.jpg\">");
+			weixin.click(function () {
+				donate(seekHelp._id, 100)
+			});
+			donateD.append(zhifubao);
+			donateD.append(weixin);
+			container.append(donateD);
+
+			var imgs = $("<div>");
+			imgs.addClass("seek-help-imgs");
+			seekHelp.p_image = seekHelp.p_image && JSON.parse(seekHelp.p_image)
+			if (Array.isArray(seekHelp.p_image) && seekHelp.p_image.length > 0) {
+				seekHelp.p_image.forEach(function (img) {
+					imgs.append($("<img>").attr("src", img));
+				});
+			}
+			container.append(imgs);
+
+		}
+
+		$(document).ready(function () {
+			var shId = getParams("id");
+
+
+			var params = {};
+			$.ajax({
+				async: false,
+				type: "GET",
+				contentType: "application/x-www-form-urlencoded",
+				url: requestUrl + "/projects/" + shId,
+				data: params,
+				dataType:'json',
+				success: function (r, s) {
+					//console.log(r.responseText);
+
+					if (r && r.success) {
+						renderSeekHelp(r);
+					} else {
+						alert(r);
+					}
+
+				}
+			});
+
+
+			/**
+			var seekHelp = {
+				id: shId,
+				title: "拾起18岁少年的希望：985大学入学体检却查出白血病！",
+				desc: "拾起18岁少年的希望：985大学入学体检却查出白血病！",
+				originator: "夏烽翊",
+				target_amount: 500000,
+				images: ["https://static.manyoubang.com/axc/index_web/images/axcEg1@2x.png", "https://static.manyoubang.com/axc/index_web/images/axcEg1@2x.png"],
+				current_amount: 500837,
+				helped_count: 16646,
+				date: "2017-09-11"
+			};
+			renderSeekHelp(seekHelp);
+			**/
+		});
+
+	</script>
 </head>
+
 <body>
-<div class="header">
-<div class="personal">
-<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-</div>
-</div>
-<div class="container" id="seek-help">
-</div>
+	<div class="header">
+		<div class="personal">
+			<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+		</div>
+	</div>
+	<div class="container" id="seek-help">
+	</div>
 </body>
+
 </html>

@@ -14,7 +14,7 @@ app.route.get('/projects', async (req) => {
   } else {
     throw new Error('Sort field not supported')
   }
-  let addresses = res.projects.map((a) => a.authorId)
+  let addresses = res.projects.map((a) => a.author_id)
   let accounts = await app.model.Account.findAll({
     condition: {
       address: { $in: addresses }
@@ -26,7 +26,7 @@ app.route.get('/projects', async (req) => {
     accountMap.set(account.address, account)
   }
   for (let project of res.projects) {
-    let account = accountMap.get(project.authorId)
+    let account = accountMap.get(project.author_id)
     if (account) {
       project.nickname = account.str1
     }
@@ -42,7 +42,9 @@ app.route.get('/projects/:id', async (req) => {
   if (app.custom.cache.has(key)) {
     return app.custom.cache.get(key)
   }
-  let project = await app.model.Project.findOne({ _id: id })
+  let project = await app.model.Project.findOne({
+    condition:{ _id: id }
+  })
   if (!project) throw new Error('Project not found')
 
   //查询关联的证明
@@ -50,7 +52,7 @@ app.route.get('/projects/:id', async (req) => {
   //查询关联的记录
   let records = await getRecordsById(id)
 
-  let account = await app.model.Account.findOne({ address: project.author_id })
+  let account = await app.model.Account.findOne({ condition:{address: project.author_id }})
   if (account) {
     project.nickname = account.str1
   }
@@ -68,6 +70,9 @@ async function getProjectsByTime(options) {
   let projects = await app.model.Project.findAll({
     limit: options.limit || 50,
     offset: options.offset || 0,
+    sort: {
+
+    }
     // sort: { timestamp: -1 }
   })
   return { projects: projects }

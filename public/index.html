@@ -80,6 +80,8 @@ html, body {
 }
 </style>
 <script type="text/javascript" src="assets/js/jquery.js"></script>
+<script type="text/javascript" src="assets/js/common.js"></script>
+<script src="assets/js/user.js"></script>
 <script type="text/javascript">
 function renderItems(items){
 	var list = $("#seek-help-list");
@@ -90,44 +92,79 @@ function renderItems(items){
 		
 		var img = $("<div>");
 		img.addClass("seek-help-img");
-		img.append($("<img>").attr("src", item.images[0]));
-		img.append($("<p>").text(item.title));
+		item.p_image = $.parseJSON(item.p_image);
+		if (Array.isArray(item.p_image) && item.p_image.length > 0) {
+			img.append($("<img>").attr("src", item.p_image[0]));
+		} else {
+			img.append($("<img>").attr("src", "assets/img/default.png"));
+		}
+		img.append($("<p>").text(item.p_name));
 		seekHelp.append(img);
 		img.click(function(id){
 			return function(){
 				window.location.href = 'detail.html?id='+ id;
 			}
-		}(item.id));
-		
-		var txt = $("<ul>");
-		txt.addClass("seek-help-txt");
-		txt.append($("<li><span class=\"font-green\">"+ item.current_amount +"</span>元筹款</li>"));
-		txt.append($("<li><span class=\"font-green\">"+ item.helped_count +"</span>次帮助</li>"));
-		txt.append($("<li class=\"font-gray\">发起人："+ item.originator +" </li>"));
-		txt.append($("<li class=\"font-gray\">"+ item.date +"</li>"));
-		seekHelp.append(txt);
-		
-		list.append(seekHelp);
+		}(item._id));
+		(function (item) {
+			$.ajax({
+				async: true,
+				type: "GET",
+				contentType : "application/x-www-form-urlencoded",
+				url: requestUrl + "/projects/" + item._id,
+				data: null,
+				complete: function (r, s) {
+					//console.log(r.responseText);
+					if (s == "success") {
+						var result = $.parseJSON(r.responseText);
+						if (result && result.success) {
+							var txt = $("<ul>");
+							txt.addClass("seek-help-txt");
+							txt.append($("<li><span class=\"font-green\">"+ result.moneySum +"</span>元筹款</li>"));
+							txt.append($("<li><span class=\"font-green\">"+ result.count +"</span>次帮助</li>"));
+							txt.append($("<li class=\"font-gray\">发起人："+ item.nickname +" </li>"));
+							txt.append($("<li class=\"font-gray\">"+ new Date(item.timestamp * 1000).toLocaleDateString() +"</li>"));
+							seekHelp.append(txt);
+							
+							list.append(seekHelp);
+						} else {
+							alert(r);
+						}
+					} else {
+						alert(r);
+					}
+				},
+				error : function (r, s, e) {
+					alert(r);
+				}
+			});		
+		})(item)
 	});
 }
 
 $(document).ready(function(){
-	/**
-	var url = "";
+    if(!User.isLogin()){
+        window.location.href = './login.html'
+        return;
+    }
+
+    $('.glyphicon-plus').click(function(){
+        window.location.href = './create_project.html'
+    })
+
 	var params = {};
 	
 	$.ajax({
 		async: false,
-		type: "POST",
+		type: "GET",
 		contentType : "application/x-www-form-urlencoded",
-		url: url,
+		url: requestUrl + "/projects",
 		data: params,
 		complete: function (r, s) {
 			//console.log(r.responseText);
 			if (s == "success") {
 				var result = $.parseJSON(r.responseText);
 				if (result && result.success) {
-					renderItems(result);
+					renderItems(result.projects);
 				} else {
 					alert(r);
 				}
@@ -139,7 +176,7 @@ $(document).ready(function(){
 			alert(r);
 		}
 	});
-	**/
+	/**
 	var items = [
 		{
 			id: "110",
@@ -164,7 +201,8 @@ $(document).ready(function(){
 			date: "2017-11-13"
 		}
 	]
-	renderItems(items);
+	renderItems(items
+	**/
 });
  
 </script>
@@ -172,7 +210,7 @@ $(document).ready(function(){
 <body>
 <div class="header">
 <div class="personal">
-<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 </div>
 </div>
 <div class="container" id="seek-help-list">
